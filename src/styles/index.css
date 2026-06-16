@@ -1,0 +1,156 @@
+/* 全局重置与基础样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #6c5ce7;
+  --primary-light: #a29bfe;
+  --primary-dark: #4834d4;
+  --accent: #00cec9;
+  --bg: #f0f2f8;
+  --card-bg: #ffffff;
+  --text: #2d3436;
+  --text-secondary: #636e72;
+  --border: #e8ecf1;
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.1);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html,
+body {
+  height: 100%;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "PingFang SC",
+    "Hiragino Sans GB",
+    "Microsoft YaHei",
+    sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c4c4c4;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}
+
+/* 文本域样式覆盖 */
+.el-textarea__inner {
+  font-family:
+    "JetBrains Mono", "Fira Code", "Menlo", "Consolas", monospace !important;
+  line-height: 1.8 !important;
+}
+
+/* Element Plus 卡片圆角覆盖 */
+.el-card {
+  border-radius: var(--radius) !important;
+  border: none !important;
+  box-shadow: var(--shadow) !important;
+}
+
+/* 按钮悬停效果 */
+.el-button--primary {
+  background: linear-gradient(
+    135deg,
+    var(--primary),
+    var(--primary-dark)
+  ) !important;
+  border: none !important;
+}
+
+.el-button--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4) !important;
+}
+
+.el-button--primary:active {
+  transform: translateY(0);
+}
+
+/* 选择器样式 */
+.el-select .el-input__wrapper {
+  border-radius: var(--radius-sm) !important;
+}
+
+.el-date-picker {
+  border-radius: var(--radius-sm) !important;
+}
+
+/* 渐变背景动画 */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.gradient-bg {
+  background: linear-gradient(135deg, #6c5ce7, #a29bfe, #00cec9, #6c5ce7);
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease infinite;
+}
+
+/* 加载动画 */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.loading-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* 淡入动画 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.5s ease-out;
+}
