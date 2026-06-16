@@ -6,7 +6,7 @@ import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import { resolve } from "path";
 
 export default defineConfig({
-  base: '/gitee-report-tool/',
+  base: "/gitee-report-tool/",
   plugins: [
     vue(),
     AutoImport({

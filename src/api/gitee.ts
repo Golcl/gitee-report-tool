@@ -8,7 +8,7 @@ export function getAuthUrl(): string {
   const clientId = import.meta.env.VITE_GITEE_CLIENT_ID || "YOUR_CLIENT_ID";
   const redirectUri =
     import.meta.env.VITE_GITEE_REDIRECT_URI ||
-    window.location.origin + window.location.pathname + '#/callback';
+    window.location.origin + window.location.pathname + "#/callback";
   return `${AUTH_BASE}/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code`;
 }
 
