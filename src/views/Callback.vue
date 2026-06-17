@@ -83,7 +83,7 @@ async function exchangeCodeForToken(code: string): Promise<string | null> {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .callback-page {
   min-height: 100vh;
   display: flex;
@@ -115,6 +115,17 @@ h2 {
   margin-top: 12px;
   color: var(--text-secondary);
   font-size: 14px;
+}
+
+html.dark {
+  .callback-page {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  }
+
+  .callback-card {
+    background: var(--card-bg);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  }
 }
 
 @keyframes spin {

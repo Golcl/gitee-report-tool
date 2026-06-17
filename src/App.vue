@@ -9,25 +9,31 @@
 </template>
 
 <script setup lang="ts">
+import { useTheme } from '@/composables/useTheme'
+
+// 初始化主题（composable 内部会自动应用）
+useTheme()
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .app-shell {
   min-height: 100vh;
 }
 
-.page-fade-enter-active,
-.page-fade-leave-active {
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
+.page-fade {
+  &-enter-active,
+  &-leave-active {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
 
-.page-fade-enter-from {
-  opacity: 0;
-  transform: translateY(12px);
-}
+  &-enter-from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
 
-.page-fade-leave-to {
-  opacity: 0;
-  transform: translateY(-12px);
+  &-leave-to {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
 }
 </style>

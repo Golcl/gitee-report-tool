@@ -11,6 +11,13 @@
           <span class="brand-text">Gitee 工作报告生成器</span>
         </div>
         <div class="user-area">
+          <el-button
+            class="theme-toggle-btn"
+            :icon="isDark() ? Moon : Sunny"
+            circle
+            @click="toggleTheme"
+            title="切换主题"
+          />
           <el-dropdown trigger="click">
             <div class="user-badge">
               <el-avatar :src="user?.avatar_url" :size="36" />
@@ -309,6 +316,15 @@
         <footer class="login-footer">
           <p>Gitee 工作报告生成器 · 让汇报更轻松</p>
         </footer>
+
+        <el-button
+          class="login-theme-toggle"
+          :icon="isDark() ? Moon : Sunny"
+          circle
+          size="large"
+          @click="toggleTheme"
+          title="切换主题"
+        />
       </div>
     </template>
   </div>
@@ -316,10 +332,11 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
-import { FullScreen } from '@element-plus/icons-vue'
+import { FullScreen, Sunny, Moon } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import dayjs from 'dayjs'
 import type { RangeType, GiteeUser, GiteeRepo, ReportItem } from '@/types'
+import { useTheme } from '@/composables/useTheme'
 import {
   getAuthUrl,
   setStoredToken,
@@ -339,6 +356,7 @@ import {
 } from '@/utils'
 
 // ============ 状态 ============
+const { isDark, toggleTheme } = useTheme()
 const token = ref<string | null>(getStoredToken())
 const user = ref<GiteeUser | null>(getStoredUser())
 const isLoggedIn = computed(() => !!token.value)
@@ -563,7 +581,7 @@ onMounted(async () => {
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /* ================ 主界面 ================ */
 .home-page {
   min-height: 100vh;
@@ -584,6 +602,27 @@ onMounted(async () => {
   position: sticky;
   top: 0;
   z-index: 100;
+
+  html.dark & {
+    background: rgba(30, 30, 30, 0.9);
+  }
+}
+
+.user-area {
+  display: flex;
+  align-items: center;
+}
+
+.theme-toggle-btn {
+  margin-right: 4px;
+  --el-button-bg-color: transparent;
+  --el-button-border-color: var(--border);
+  --el-button-text-color: var(--text-secondary);
+
+  &:hover {
+    --el-button-text-color: var(--primary);
+    --el-button-border-color: var(--primary-light);
+  }
 }
 
 .brand {
@@ -620,10 +659,10 @@ onMounted(async () => {
   padding: 4px 12px 4px 4px;
   border-radius: 40px;
   transition: background var(--transition);
-}
 
-.user-badge:hover {
-  background: var(--bg);
+  &:hover {
+    background: var(--bg);
+  }
 }
 
 .user-name {
@@ -660,6 +699,12 @@ onMounted(async () => {
 /* 配置卡片 */
 .config-card {
   overflow: visible;
+
+  html.dark &,
+  html.dark & :deep(.el-card__body),
+  html.dark & :deep(.el-card__header) {
+    background: var(--card-bg) !important;
+  }
 }
 
 .card-header {
@@ -667,11 +712,11 @@ onMounted(async () => {
   align-items: center;
   gap: 14px;
   margin-bottom: 24px;
-}
 
-.card-header h3 {
-  font-size: 18px;
-  font-weight: 600;
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+  }
 }
 
 .step-badge {
@@ -685,10 +730,10 @@ onMounted(async () => {
   font-weight: 700;
   color: #fff;
   background: linear-gradient(135deg, var(--primary), var(--primary-light));
-}
 
-.step-badge.done {
-  background: linear-gradient(135deg, #00b894, #55efc4);
+  &.done {
+    background: linear-gradient(135deg, #00b894, #55efc4);
+  }
 }
 
 .range-selector {
@@ -715,17 +760,24 @@ onMounted(async () => {
   gap: 8px;
   border: 2px solid var(--border) !important;
   transition: all var(--transition) !important;
-}
 
-.range-btn:not(.active):hover {
-  border-color: var(--primary-light) !important;
-  color: var(--primary) !important;
-  transform: translateY(-2px);
-}
+  &:not(.active) {
+    &:hover {
+      border-color: var(--primary-light) !important;
+      color: var(--primary) !important;
+      transform: translateY(-2px);
+    }
 
-.range-btn.active {
-  border-color: var(--primary) !important;
-  box-shadow: 0 4px 16px rgba(108, 92, 231, 0.25) !important;
+    html.dark & {
+      background: transparent;
+      color: var(--text);
+    }
+  }
+
+  &.active {
+    border-color: var(--primary) !important;
+    box-shadow: 0 4px 16px rgba(108, 92, 231, 0.25) !important;
+  }
 }
 
 .custom-range {
@@ -744,6 +796,25 @@ onMounted(async () => {
   color: var(--primary);
   font-size: 14px;
   font-weight: 500;
+
+  html.dark & {
+    background: rgba(108, 92, 231, 0.12);
+  }
+}
+
+/* 报告卡片暗色适配 */
+html.dark {
+  .report-card,
+  .report-card :deep(.el-card__body),
+  .report-card :deep(.el-card__header) {
+    background: var(--card-bg) !important;
+  }
+
+  .login-card,
+  .login-card :deep(.el-card__body),
+  .login-card :deep(.el-card__header) {
+    background: var(--card-bg) !important;
+  }
 }
 
 /* 操作栏 */
@@ -765,6 +836,12 @@ onMounted(async () => {
 /* 进度卡片 */
 .progress-card {
   background: #fafbff !important;
+
+  html.dark &,
+  html.dark & :deep(.el-card__body),
+  html.dark & :deep(.el-card__header) {
+    background: var(--card-bg) !important;
+  }
 }
 
 .progress-info {
@@ -790,13 +867,18 @@ onMounted(async () => {
 
 .report-textarea {
   margin-top: 16px;
-}
 
-.report-textarea :deep(.el-textarea__inner) {
-  border-radius: var(--radius-sm);
-  font-size: 14px;
-  min-height: 420px;
-  color: #1a1a2e;
+  :deep(.el-textarea__inner) {
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    min-height: 420px;
+    color: #1a1a2e;
+  }
+
+  html.dark & :deep(.el-textarea__inner) {
+    color: var(--text);
+    background: var(--card-bg);
+  }
 }
 
 /* 页脚 */
@@ -817,6 +899,10 @@ onMounted(async () => {
   position: relative;
   overflow: hidden;
   background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+
+  html.dark & {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  }
 }
 
 .bg-decoration {
@@ -874,6 +960,16 @@ onMounted(async () => {
 .login-header {
   text-align: center;
   margin-bottom: 32px;
+
+  h1 {
+    font-size: 28px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
 }
 
 .hero-icon {
@@ -887,16 +983,6 @@ onMounted(async () => {
   background: linear-gradient(135deg, var(--primary), var(--accent));
   box-shadow: 0 16px 40px rgba(108, 92, 231, 0.35);
   margin-bottom: 24px;
-}
-
-.login-header h1 {
-  font-size: 28px;
-  font-weight: 800;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 10px;
 }
 
 .subtitle {
@@ -942,6 +1028,20 @@ onMounted(async () => {
 
 .oauth-alert {
   border-radius: var(--radius-sm) !important;
+
+  html.dark & {
+    background: rgba(108, 92, 231, 0.1) !important;
+    border: 1px solid rgba(108, 92, 231, 0.2) !important;
+    color: var(--text) !important;
+  }
+
+  html.dark & .el-alert__title {
+    color: var(--text) !important;
+  }
+
+  html.dark & .el-alert__icon {
+    color: var(--primary-light) !important;
+  }
 }
 
 .oauth-alert code {
@@ -949,6 +1049,11 @@ onMounted(async () => {
   padding: 2px 8px;
   border-radius: 4px;
   font-size: 12px;
+
+  html.dark & {
+    background: #2e2e2e;
+    color: var(--text);
+  }
 }
 
 .login-submit-btn {
@@ -974,6 +1079,10 @@ onMounted(async () => {
   background: #fff3f0;
   padding: 2px 6px;
   border-radius: 4px;
+
+  html.dark & {
+    background: #3d2a2a;
+  }
 }
 
 .features-row {
@@ -999,6 +1108,25 @@ onMounted(async () => {
   color: var(--text-secondary);
   font-size: 13px;
   z-index: 1;
+}
+
+.login-theme-toggle {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 2;
+  --el-button-bg-color: rgba(255, 255, 255, 0.6);
+  --el-button-border-color: var(--border);
+  --el-button-text-color: var(--text-secondary);
+  backdrop-filter: blur(10px);
+
+  html.dark & {
+    --el-button-bg-color: rgba(30, 30, 30, 0.6);
+  }
+
+  &:hover {
+    --el-button-text-color: var(--primary);
+  }
 }
 
 /* ================ 响应式 ================ */
@@ -1053,6 +1181,14 @@ onMounted(async () => {
   overflow: hidden;
 }
 
+/* 全屏弹窗暗色适配 */
+html.dark :global(.fullscreen-dialog.el-dialog),
+html.dark :global(.fullscreen-dialog .el-dialog__header),
+html.dark :global(.fullscreen-dialog .el-dialog__body) {
+  background: var(--card-bg) !important;
+  color: var(--text) !important;
+}
+
 .fullscreen-toolbar {
   display: flex;
   align-items: center;
@@ -1074,5 +1210,10 @@ onMounted(async () => {
   border-radius: var(--radius-sm);
   resize: none;
   color: #1a1a2e;
+}
+
+html.dark .fullscreen-textarea :deep(.el-textarea__inner) {
+  color: var(--text);
+  background: var(--bg);
 }
 </style>
